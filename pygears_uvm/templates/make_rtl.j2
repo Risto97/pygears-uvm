@@ -1,0 +1,35 @@
+## Written from example by
+## https://github.com/ZipCPU/dbgbus/blob/master/bench/rtl/Makefile
+
+all:
+OBJ_DIR := obj_dir
+TOP_MOD = wrap_{{dut.basename}}
+SUBMAKE := $(MAKE) --no-print-directory -C
+VERILATOR := verilator
+
+VINC = -Isrc
+VFLAGS = -sc -CFLAGS -fpic -LDFLAGS -Wno-fatal --Mdir $(OBJ_DIR) $(VINC) --pins-sc-uint
+TRACE_FLAGS = --trace -no-trace-params --trace-structs
+
+.PHONY: all
+all: verilate library
+
+.PHONY: verilate
+verilate: $(OBJ_DIR)/V$(TOP_MOD).h
+
+$(OBJ_DIR)/V$(TOP_MOD).h:
+	-$(VERILATOR) $(VFLAGS) $(TRACE_FLAGS) $(VINC) $(TOP_MOD)
+
+.PHONY: library
+library: $(OBJ_DIR)/V$(TOP_MOD).h
+	$(SUBMAKE) $(OBJ_DIR)/ -f V$(TOP_MOD).mk
+
+.PHONY: clean
+clean:
+	rm -rf $(OBJ_DIR)/
+
+DEPS := $(wildcard $(OBJ_DIR)/*.d)
+
+ifneq ($(DEPS),)
+include $(DEPS)
+endif

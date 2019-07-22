@@ -1,0 +1,16 @@
+verilate:
+	make -C rtl/ all
+
+uvm: verilate
+	make -C uvm/
+
+test: uvm
+	make -C uvm test
+
+wave: test
+	make -C uvm wave
+
+.PHONY: clean
+clean:
+	make -C rtl/ clean
+	make -C uvm/ clean
