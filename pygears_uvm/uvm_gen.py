@@ -45,4 +45,4 @@ def uvm_gen(prjdir):
     try:
         clang_format(os.path.join(prjdir, "uvm"))
     except:
-        printf("Install clang-format for c++ formatting")
+        print("Install clang-format for c++ formatting")
