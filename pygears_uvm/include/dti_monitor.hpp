@@ -40,16 +40,11 @@ public:
 
     while (true) // monitor forever
     {
-      sc_core::wait(vif->dti_data.default_event()); // wait for input changes
-      p.data = vif->dti_data.read();
-      message(p);
-      item_collected_port.write(p);
-
-      if (checks_enable) {
-        UVM_FATAL(this->name(), "No checks yet");
-      }
-      if (coverage_enable) {
-        UVM_FATAL(this->name(), "No checks yet");
+      sc_core::wait(vif->clk->posedge_event());
+      if(vif->dti_valid and vif->dti_ready){
+        p.data = vif->dti_data.read();
+        message(p);
+        item_collected_port.write(p);
       }
     }
   }

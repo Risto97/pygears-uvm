@@ -5,7 +5,7 @@ from pygears import Intf
 from pygears.typing import Queue, Uint
 
 
-din = Intf(Queue[Uint[8], 2])
+din = Intf(Uint[8])
 
 din | dreg()
 

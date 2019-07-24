@@ -3,6 +3,7 @@ from pygears_uvm.templates.make_uvm import Make_UVM
 from pygears_uvm.templates.make_rtl import Make_RTL
 from pygears_uvm.templates.sc_main import SC_Main
 from pygears_uvm.templates.sequence import Sequence
+from pygears_uvm.templates.scoreboard import Scoreboard
 
 from pygears.conf.registry import registry
 
@@ -31,6 +32,8 @@ def uvm_gen(prjdir):
     din_seq = Sequence(intf=top.in_ports[0], prjdir=prjdir, dut=top)
     din_seq.create_files()
 
+    sb = Scoreboard(prjdir=prjdir, dut=top)
+    sb.create_files()
 
     uvm = Make_UVM(top, prjdir=prjdir)
     uvm.create_files()

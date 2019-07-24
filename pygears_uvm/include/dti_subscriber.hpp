@@ -5,8 +5,6 @@
 #include <tlm.h>
 #include <uvm>
 
-#include "dti_scoreboard.hpp"
-
 template <class packet_type, class sb_t, void (sb_t::*F)(const packet_type& a)>
 class dti_subscriber : public uvm::uvm_subscriber<packet_type> {
 public:
