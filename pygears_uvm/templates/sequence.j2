@@ -1,0 +1,97 @@
+#ifndef {{seq.name.upper()}}_HPP_
+#define {{seq.name.upper()}}_HPP_
+
+#include <sstream>
+#include <string>
+#include <systemc>
+#include <uvm>
+
+#include <iostream>
+
+#include "dti_packet.hpp"
+#include "data_types.hpp"
+
+{% if seq.is_queue %}
+#include <vector>
+{% endif %}
+
+template <typename packet_type = uvm::uvm_sequence_item, typename RSP = packet_type>
+class {{seq.name}} : public uvm::uvm_sequence<packet_type, RSP> {
+public:
+
+{{seq.seq_var_type()}} data;
+
+  {{seq.name}}(const std::string &name) : uvm::uvm_sequence<packet_type, RSP>(name) {}
+
+  UVM_OBJECT_PARAM_UTILS({{seq.name}}<packet_type, RSP>);
+
+// Fill data field with this method
+void gen_seq();
+
+  void pre_body() {
+    // raise objection if started as a root {{seq.name}}
+    if (this->starting_phase != NULL)
+      this->starting_phase->raise_objection(this);
+
+    gen_seq();
+  }
+
+  void body() {
+    packet_type *req;
+    RSP *rsp;
+    req = new packet_type();
+    rsp = new RSP();
+
+{% if seq.is_queue %}
+  for (auto iter0 = data.begin(); iter0 != data.end(); ++iter0){
+  if(iter0+1 == data.end()) req->data.eot[{{seq.queue_lvl-1}}] = 1;
+  else req->data.eot[{{seq.queue_lvl-1}}] = 0;
+
+  {% for i in range(1,seq.queue_lvl) %}
+        for (auto iter{{i}} = iter{{i-1}}->begin(); iter{{i}} != iter{{i-1}}->end(); ++iter{{i}}) {
+    if(iter{{i}}+1 == iter{{i-1}}->end()) req->data.eot[{{seq.queue_lvl-1-i}}] = 1;
+    else req->data.eot[{{seq.queue_lvl-1-i}}] = 0;
+
+  {% endfor %}
+
+  req->data = *iter{{seq.queue_lvl-1}};
+  message(*req);
+
+  this->start_item(req);
+  this->finish_item(req);
+  this->get_response(rsp);
+
+  {% for i in range(1,seq.queue_lvl) %}
+    }
+  {% endfor %}
+  }
+{% elif seq.is_integer %}
+  for (auto iter0 = data.begin(); iter0 != data.end(); ++iter0){
+
+  req->data = *iter0;
+  message(*req);
+
+  this->start_item(req);
+  this->finish_item(req);
+  this->get_response(rsp);
+
+  }
+{% endif %}
+
+    UVM_INFO(this->get_name(), "Finishing sequence", uvm::UVM_MEDIUM);
+}
+
+  void post_body() {
+    if (this->starting_phase != NULL)
+      this->starting_phase->drop_objection(this);
+  }
+
+  void message(const packet_type &p) {
+    std::stringstream ss;
+    ss << p.data;
+    std::string msg = ss.str();
+    UVM_INFO(" Generated data:", msg, uvm::UVM_MEDIUM);
+  }
+
+};
+#endif

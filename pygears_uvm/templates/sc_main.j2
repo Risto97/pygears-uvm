@@ -4,6 +4,7 @@
 #include "Vwrap_{{dut.name}}.h"
 
 #include "env.hpp"
+#include "sim_params.hpp"
 
 int sc_main(int argc, char **argv) {
   Verilated::commandArgs(argc, argv);
@@ -12,7 +13,7 @@ int sc_main(int argc, char **argv) {
   uvm::uvm_set_verbosity_level(uvm::UVM_HIGH);
 
 
-  env<Vwrap_{{dut.name}}> *my_env = new env<Vwrap_{{dut.name}}>("env", "{{dut.name}}", 1000, "trace.vcd");
+  env<Vwrap_{{dut.name}}> *my_env = new env<Vwrap_{{dut.name}}>("env", "{{dut.name}}", RUN_CYCLES, "trace.vcd");
 
   my_env->set_report_verbosity_level(UVM_HIGH);
 

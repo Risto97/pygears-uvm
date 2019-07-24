@@ -26,9 +26,9 @@ class Make_UVM:
             lstrip_blocks=True)
 
         try:
-            print(os.environ['SYSTEMC'])
-            print(os.environ['SYSTEMC_UVM'])
-            print(os.environ['PYGEARS_UVM'])
+            os.environ['SYSTEMC']
+            os.environ['SYSTEMC_UVM']
+            os.environ['PYGEARS_UVM']
         except:
             raise EnvironmentError("Please set your environment variables")
 
