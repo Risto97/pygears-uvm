@@ -3,6 +3,7 @@ from pygears.util.fileio import save_file
 import os
 from pathlib import Path
 
+import imp
 
 class Make_UVM:
     def __init__(self, dut, prjdir):
@@ -25,13 +26,14 @@ class Make_UVM:
             trim_blocks=True,
             lstrip_blocks=True)
 
+        pygears_uvm_dir = imp.find_module('pygears_uvm')[1]
+
         try:
             os.environ['SYSTEMC']
             os.environ['SYSTEMC_UVM']
-            os.environ['PYGEARS_UVM']
         except:
             raise EnvironmentError("Please set your environment variables")
 
-        context = {'dut': self.dut, 'rtldir': self.rtldir}
+        context = {'dut': self.dut, 'rtldir': self.rtldir, 'pygears_uvm_dir': pygears_uvm_dir}
         res = env.get_template('make_uvm.j2').render(context)
         save_file(f"Makefile", self.outdir, res)

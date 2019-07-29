@@ -4,8 +4,8 @@
 SYSTEMC := ${SYSTEMC}
 UVM_DIR = ${SYSTEMC_UVM}
 UVM_INSTALL_DIR = $(UVM_DIR)/objdir
-PYGEARS_UVM_DIR = ${PYGEARS_UVM}
-PY_UVM_INC = -I$(PYGEARS_UVM_DIR)/pygears_uvm/include
+PYGEARS_UVM_DIR = {{pygears_uvm_dir}}
+PY_UVM_INC = -I$(PYGEARS_UVM_DIR)/include
 
 CXX	:= g++
 OBJDIR	:= obj-pc
