@@ -13,7 +13,7 @@ RTLD	:= {{rtldir}}
 VOBJDR	:= $(RTLD)/obj_dir
 TOP_MOD = wrap_{{dut.basename}}
 SYSC_OPT = -I${SYSTEMC}/include -L${SYSTEMC}/lib-linux64 -lsystemc
-UVM_OPT = $(UVM_INSTALL_DIR)/src/uvmsc/.libs/libuvm-systemc.so -L$(UVM_DIR)/lib-linux64
+UVM_OPT = -L$(UVM_DIR)/lib-linux64 -luvm-systemc
 UVM_SRC = -I$(UVM_DIR)/src/ -I$(UVM_INSTALL_DIR)/src/ -I$(UVM_DIR)/include
 
 DTI_INC = -I
