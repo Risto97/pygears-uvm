@@ -57,7 +57,7 @@ $(OBJDIR)/%.o: $(VINCD)/%.cpp
 # Build our actual target.  Note the dependency on the $(OBJECTS) list of
 # object files above
 main_tb: $(OBJECTS) $(VOBJDR)/V$(TOP_MOD)__ALL.a
-	-g++ $(LINK_FLAGS) $(SYSC_OPT) $(UVM_OPT) $(OBJECTS) $(VOBJDR)/V$(TOP_MOD)__ALL.a -lpthread -pthread -Wl,-rpath -Wl,$(UVM_DIR)/lib-linux64 -Wl,-rpath -Wl,$(SYSTEMC)/lib-linux64 -o $@
+	-g++ $(LINK_FLAGS) $(OBJECTS) $(VOBJDR)/V$(TOP_MOD)__ALL.a $(SYSC_OPT) $(UVM_OPT) -lpthread -pthread -Wl,-rpath -Wl,$(UVM_DIR)/lib-linux64 -Wl,-rpath -Wl,$(SYSTEMC)/lib-linux64 -o $@
 
 # The "test" target, just runs our test bench object
 #
