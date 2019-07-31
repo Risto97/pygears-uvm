@@ -30,7 +30,6 @@ class DUT:
         ports = []
         for port in self.dut.in_ports:
             ports.append(port)
-        # print(ports)
         return ports
 
     def agent_type(self, intf):
