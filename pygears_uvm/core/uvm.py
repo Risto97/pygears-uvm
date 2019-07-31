@@ -1,7 +1,7 @@
 from pygears_uvm.core.dut import DUT
 from pygears_uvm.utils.jinja import gen_file
 from pygears_uvm.utils.hdlgen import hdlgen_wspy, delete_tracing_off
-from pygears_uvm.templates.sequence import Sequence
+from pygears_uvm.core.sequence import Sequence
 import importlib
 import os
 
