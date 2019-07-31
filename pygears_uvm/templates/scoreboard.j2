@@ -9,42 +9,42 @@
 #include "dti_packet.hpp"
 #include "data_types.hpp"
 
-{% for port in sb.intfs %}
-  using {{port.basename}}_packet_type = {{sb.dut.packet_type_str(port)}};
+{% for port in uvm.dut.intfs %}
+  using {{port.basename}}_packet_type = {{uvm.dut.packet_type_str(port)}};
 {% endfor %}
 
 
 class scoreboard : public uvm::uvm_scoreboard
 {
 public:
-{% for port in sb.intfs %}
-  {{sb.dut.container_type_str(port)}} {{port.basename}}_data;
+{% for port in uvm.dut.intfs %}
+  {{uvm.dut.container_type_str(port)}} {{port.basename}}_data;
 {% endfor %}
 
-{% for port in sb.intfs %}
-  {% if sb.dut.is_queue(port) %}
-    {% for i in range(1, sb.dut.queue_lvl(port)) %}
-      {{sb.dut.container_type_str(sb.dut.queue_flatten(port, lvl=i))}} {{port.basename}}_data{{sb.dut.queue_lvl(port)-i-1}};
+{% for port in uvm.dut.intfs %}
+  {% if uvm.dut.is_queue(port) %}
+    {% for i in range(1, uvm.dut.queue_lvl(port)) %}
+      {{uvm.dut.container_type_str(uvm.dut.queue_flatten(port, lvl=i))}} {{port.basename}}_data{{uvm.dut.queue_lvl(port)-i-1}};
     {% endfor %}
   {% endif %}
 {% endfor %}
 
-{% for port in sb.intfs %}
+{% for port in uvm.dut.intfs %}
   uvm::uvm_analysis_export<{{port.basename}}_packet_type> {{port.basename}}_listener_imp;
 {% endfor %}
 
-{% for port in sb.intfs %}
+{% for port in uvm.dut.intfs %}
   void {{port.basename}}_write(const {{port.basename}}_packet_type &p)
   {
-  {% if sb.dut.is_queue(port) %}
-    {% if sb.dut.queue_lvl(port) > 1 %}
+  {% if uvm.dut.is_queue(port) %}
+    {% if uvm.dut.queue_lvl(port) > 1 %}
       {{port.basename}}_data{{0}}.push_back(p.data.data);
     {% else %}
       {{port.basename}}_data.push_back(p.data.data);
     {% endif %}
-    {% for i in range(0, sb.dut.queue_lvl(port)-1) %}
+    {% for i in range(0, uvm.dut.queue_lvl(port)-1) %}
       if(p.data.eot[{{i}}]){
-      {% if i == sb.dut.queue_lvl(port)-2 %}
+      {% if i == uvm.dut.queue_lvl(port)-2 %}
         {{port.basename}}_data.push_back({{port.basename}}_data{{i}});
         {{port.basename}}_data{{i}}.clear();
       {% else %}
@@ -53,7 +53,7 @@ public:
       {% endif %}
     {% endfor %}
 
-    {% for i in range(0, sb.dut.queue_lvl(port)-1) %}
+    {% for i in range(0, uvm.dut.queue_lvl(port)-1) %}
       }
     {% endfor %}
   {% else %}
@@ -64,7 +64,7 @@ public:
   }
 {% endfor %}
 
-{% for port in sb.intfs %}
+{% for port in uvm.dut.intfs %}
   dti_subscriber<{{port.basename}}_packet_type, scoreboard, &scoreboard::{{port.basename}}_write> *{{port.basename}}_listener;
 {% endfor %}
 
@@ -74,7 +74,7 @@ UVM_COMPONENT_UTILS(scoreboard);
   void build_phase(uvm::uvm_phase& phase)
   {
     uvm::uvm_scoreboard::build_phase(phase);
-{% for port in sb.intfs %}
+{% for port in uvm.dut.intfs %}
   uvm::uvm_config_db<uvm_object*>::set(this, "{{port.basename}}_listener", "sb", this);
 
     {{port.basename}}_listener = dti_subscriber<{{port.basename}}_packet_type, scoreboard, &scoreboard::{{port.basename}}_write  >::type_id::create("{{port.basename}}_listener", this);
@@ -85,7 +85,7 @@ UVM_COMPONENT_UTILS(scoreboard);
 
   void connect_phase(uvm::uvm_phase& phase)
   {
-{% for port in sb.intfs %}
+{% for port in uvm.dut.intfs %}
     {{port.basename}}_listener_imp.connect({{port.basename}}_listener->analysis_export);
 {% endfor %}
   }

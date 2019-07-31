@@ -4,14 +4,14 @@
 SYSTEMC := ${SYSTEMC}
 UVM_DIR = ${SYSTEMC_UVM}
 UVM_INSTALL_DIR = $(UVM_DIR)/objdir
-PYGEARS_UVM_DIR = {{pygears_uvm_dir}}
+PYGEARS_UVM_DIR = {{uvm.pygears_uvm_dir}}
 PY_UVM_INC = -I$(PYGEARS_UVM_DIR)/include
 
 CXX	:= g++
 OBJDIR	:= obj-pc
-RTLD	:= {{rtldir}}
+RTLD	:= ../rtl
 VOBJDR	:= $(RTLD)/obj_dir
-TOP_MOD = wrap_{{dut.basename}}
+TOP_MOD = wrap_{{uvm.dut.name}}
 SYSC_OPT = -I${SYSTEMC}/include -L${SYSTEMC}/lib-linux64 -lsystemc
 UVM_OPT = -L$(UVM_DIR)/lib-linux64 -luvm-systemc
 UVM_SRC = -I$(UVM_DIR)/src/ -I$(UVM_INSTALL_DIR)/src/ -I$(UVM_DIR)/include

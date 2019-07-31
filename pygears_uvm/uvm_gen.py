@@ -11,6 +11,7 @@ from pygears.conf.registry import registry
 import subprocess
 import os
 
+from pygears_uvm.templates.uvm import UVM
 
 def clang_format(dir):
     dir = os.path.abspath(dir)
@@ -25,30 +26,6 @@ def uvm_gen(prjdir):
     root = registry('gear/hier_root')
     top = root.child[0]
 
-    rtl = Make_RTL(top, prjdir=prjdir, language='sv')
-    rtl.hdlgen()
-    rtl.create_files()
-    rtl.delete_tracing_off()
-
-    din_seq = Sequence(intf=top.in_ports[0], prjdir=prjdir, dut=top)
-    din_seq.create_files()
-
-    sb = Scoreboard(prjdir=prjdir, dut=top)
-    sb.create_files()
-
-    uvm = Make_UVM(top, prjdir=prjdir)
+    uvm = UVM(prjdir=prjdir, dut=top)
+    uvm.hdlgen()
     uvm.create_files()
-
-    prj = Make_Prj(top, prjdir=prjdir)
-    prj.create_files()
-
-    env = Env(prjdir=prjdir, dut=top)
-    env.create_files()
-
-    sc_main = SC_Main(prjdir=prjdir, dut=top)
-    sc_main.create_files()
-
-    try:
-        clang_format(os.path.join(prjdir, "uvm"))
-    except:
-        print("Install clang-format for c++ formatting")

@@ -1,24 +1,11 @@
-import jinja2
-from pygears.util.fileio import save_file
-from pygears_uvm.utils.jinja import gen_file
-from pathlib import Path
-import os
-from pygears_uvm.utils.fileio import save_if_nexist
-
 from pygears.typing.queue import QueueMeta
 from pygears.typing.uint import UintType, IntType
-from pygears_uvm.templates.dut import DUT
-from pygears.typing.queue import QueueMeta
-from pygears.typing.uint import UintType, IntType
-
 
 class Sequence:
-    def __init__(self, intf=None, prjdir=None, dut=None):
+    def __init__(self, intf=None):
         self.intf = intf
-        self.name = self.intf.basename + "_sequence"
-        self.prjdir = prjdir
-        self.dut = DUT(dut=dut)
-        self.fn = self.name + ".hpp"
+        self.basename = self.intf.basename
+        self.name = self.basename + "_sequence"
 
     def seq_var_type(self):
         seq_t = ""
@@ -58,17 +45,3 @@ class Sequence:
     @property
     def is_int(self):
         return isinstance(self.intf.dtype, IntType)
-
-    @property
-    def outdir(self):
-        return os.path.join(self.prjdir, "uvm")
-
-    def create_files(self):
-        context = {"seq": self}
-
-        gen_file("sequence.j2", f"{self.name}.hpp", self.outdir, context)
-        gen_file("sequence_cpp.j2",
-                 f"{self.name}.cpp",
-                 self.outdir,
-                 context,
-                 overwrite=False)

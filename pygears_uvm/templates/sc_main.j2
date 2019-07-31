@@ -1,7 +1,7 @@
 #include <systemc>
 #include <uvm>
 #include "verilated.h"
-#include "Vwrap_{{dut.name}}.h"
+#include "Vwrap_{{uvm.dut.name}}.h"
 
 #include "env.hpp"
 
@@ -12,7 +12,7 @@ int sc_main(int argc, char **argv) {
   uvm::uvm_set_verbosity_level(uvm::UVM_HIGH);
 
 
-  env<Vwrap_{{dut.name}}> *my_env = new env<Vwrap_{{dut.name}}>("env", "{{dut.name}}", "trace.vcd");
+  env<Vwrap_{{uvm.dut.name}}> *my_env = new env<Vwrap_{{uvm.dut.name}}>("env", "{{uvm.dut.name}}", "trace.vcd");
 
   my_env->set_report_verbosity_level(UVM_HIGH);
 

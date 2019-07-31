@@ -5,7 +5,7 @@ from pygears.typing.uint import UintType, IntType
 
 
 class DUT:
-    def __init__(self, name='dflt', dut=None):
+    def __init__(self, dut=None):
         self.dut = dut
         self.name = self.dut.basename
 

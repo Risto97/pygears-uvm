@@ -6,7 +6,7 @@
 #include "{{seq.name}}.hpp"
 
 
-using {{seq.name}}_packet = {{seq.dut.packet_type_str(seq.intf)}};
+using {{seq.name}}_packet = {{uvm.dut.packet_type_str(seq.intf)}};
 template class {{seq.name}}<{{seq.name}}_packet, {{seq.name}}_packet >;
 
 

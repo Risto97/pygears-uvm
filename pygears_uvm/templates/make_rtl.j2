@@ -3,7 +3,7 @@
 
 all:
 OBJ_DIR := obj_dir
-TOP_MOD = wrap_{{dut.basename}}
+TOP_MOD = wrap_{{uvm.dut.name}}
 SUBMAKE := $(MAKE) --no-print-directory -C
 VERILATOR := verilator
 
