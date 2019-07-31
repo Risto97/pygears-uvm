@@ -1,5 +1,6 @@
 import jinja2
 from pygears.util.fileio import save_file
+from pygears_uvm.utils.jinja import gen_file
 import os
 from pathlib import Path
 
@@ -18,9 +19,5 @@ class Make_Prj:
         return self.prjdir
 
     def create_files(self):
-        template_dir = Path(__file__).resolve().parent.__str__()
-        env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), trim_blocks=True, lstrip_blocks=True)
-
-        context = {'dut': self.dut}
-        res = env.get_template('make_prj.j2').render(context)
-        save_file(f"Makefile", self.outdir, res)
+        context = {}
+        gen_file("make_prj.j2", "Makefile", self.outdir, context)

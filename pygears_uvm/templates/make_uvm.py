@@ -1,9 +1,11 @@
 import jinja2
 from pygears.util.fileio import save_file
+from pygears_uvm.utils.jinja import gen_file
 import os
 from pathlib import Path
 
-import imp
+import importlib
+
 
 class Make_UVM:
     def __init__(self, dut, prjdir):
@@ -20,13 +22,15 @@ class Make_UVM:
         return os.path.join(self.prjdir, "uvm")
 
     def create_files(self):
-        template_dir = Path(__file__).resolve().parent.__str__()
-        env = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(template_dir),
-            trim_blocks=True,
-            lstrip_blocks=True)
+        pygears_uvm_dir = importlib.machinery.PathFinder().find_spec(
+            "pygears_uvm")
+        pygears_uvm_dir = pygears_uvm_dir.submodule_search_locations[0]
 
-        pygears_uvm_dir = imp.find_module('pygears_uvm')[1]
+        context = {
+            'dut': self.dut,
+            'rtldir': self.rtldir,
+            'pygears_uvm_dir': pygears_uvm_dir
+        }
 
         try:
             os.environ['SYSTEMC']
@@ -34,6 +38,4 @@ class Make_UVM:
         except:
             raise EnvironmentError("Please set your environment variables")
 
-        context = {'dut': self.dut, 'rtldir': self.rtldir, 'pygears_uvm_dir': pygears_uvm_dir}
-        res = env.get_template('make_uvm.j2').render(context)
-        save_file(f"Makefile", self.outdir, res)
+        gen_file("make_uvm.j2", "Makefile", self.outdir, context)

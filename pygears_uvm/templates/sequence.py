@@ -1,5 +1,6 @@
 import jinja2
 from pygears.util.fileio import save_file
+from pygears_uvm.utils.jinja import gen_file
 from pathlib import Path
 import os
 from pygears_uvm.utils.fileio import save_if_nexist
@@ -10,6 +11,7 @@ from pygears_uvm.templates.dut import DUT
 from pygears.typing.queue import QueueMeta
 from pygears.typing.uint import UintType, IntType
 
+
 class Sequence:
     def __init__(self, intf=None, prjdir=None, dut=None):
         self.intf = intf
@@ -17,7 +19,6 @@ class Sequence:
         self.prjdir = prjdir
         self.dut = DUT(dut=dut)
         self.fn = self.name + ".hpp"
-
 
     def seq_var_type(self):
         seq_t = ""
@@ -27,7 +28,7 @@ class Sequence:
             for i in range(self.intf.dtype.lvl):
                 seq_t += "std::vector<"
             seq_t += data_t
-            seq_t += (i+1)* "> "
+            seq_t += (i + 1) * "> "
         elif self.is_uint:
             seq_t = "std::vector<unsigned int>"
         elif self.is_int:
@@ -63,12 +64,11 @@ class Sequence:
         return os.path.join(self.prjdir, "uvm")
 
     def create_files(self):
-        template_dir = Path(__file__).resolve().parent.__str__()
-        env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), trim_blocks=True, lstrip_blocks=True)
-
         context = {"seq": self}
-        res_hpp = env.get_template('sequence.j2').render(context)
-        res_cpp = env.get_template('sequence_cpp.j2').render(context)
-        save_file(f"{self.name}.hpp", self.outdir, res_hpp)
-        # save_file(f"{self.name}.cpp", self.outdir, res_cpp)
-        save_if_nexist(f"{self.name}.cpp", self.outdir, res_cpp)
+
+        gen_file("sequence.j2", f"{self.name}.hpp", self.outdir, context)
+        gen_file("sequence_cpp.j2",
+                 f"{self.name}.cpp",
+                 self.outdir,
+                 context,
+                 overwrite=False)

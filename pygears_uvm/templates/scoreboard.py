@@ -1,5 +1,6 @@
 import jinja2
 from pygears.util.fileio import save_file
+from pygears_uvm.utils.jinja import gen_file
 from pathlib import Path
 import os
 from pygears_uvm.utils.fileio import save_if_nexist
@@ -28,15 +29,6 @@ class Scoreboard:
         return os.path.join(self.prjdir, "uvm")
 
     def create_files(self):
-        template_dir = Path(__file__).resolve().parent.__str__()
-        env = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(template_dir),
-            trim_blocks=True,
-            lstrip_blocks=True)
-
         context = {"sb": self}
-        res_hpp = env.get_template('scoreboard.j2').render(context)
-        # res_cpp = env.get_template('sequence_cpp.j2').render(context)
-        save_file(f"{self.name}.hpp", self.outdir, res_hpp)
-        # save_file(f"{self.name}.cpp", self.outdir, res_cpp)
-        # save_if_nexist(f"{self.name}.cpp", self.outdir, res_cpp)
+
+        gen_file("scoreboard.j2", "scoreboard.hpp", self.outdir, context)

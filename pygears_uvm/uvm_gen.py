@@ -2,6 +2,7 @@ from pygears_uvm.templates.make_prj import Make_Prj
 from pygears_uvm.templates.make_uvm import Make_UVM
 from pygears_uvm.templates.make_rtl import Make_RTL
 from pygears_uvm.templates.sc_main import SC_Main
+from pygears_uvm.templates.env import Env
 from pygears_uvm.templates.sequence import Sequence
 from pygears_uvm.templates.scoreboard import Scoreboard
 
@@ -40,6 +41,9 @@ def uvm_gen(prjdir):
 
     prj = Make_Prj(top, prjdir=prjdir)
     prj.create_files()
+
+    env = Env(prjdir=prjdir, dut=top)
+    env.create_files()
 
     sc_main = SC_Main(prjdir=prjdir, dut=top)
     sc_main.create_files()
