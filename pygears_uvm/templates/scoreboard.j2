@@ -27,11 +27,14 @@ public:
       {{uvm.dut.container_type_str(uvm.dut.queue_flatten(port, lvl=i))}} {{port.basename}}_data{{uvm.dut.queue_lvl(port)-i-1}};
     {% endfor %}
   {% endif %}
+  sc_core::sc_event {{port.basename}}_e;
 {% endfor %}
 
 {% for port in uvm.dut.intfs %}
   uvm::uvm_analysis_export<{{port.basename}}_packet_type> {{port.basename}}_listener_imp;
 {% endfor %}
+
+void check();
 
 {% for port in uvm.dut.intfs %}
   void {{port.basename}}_write(const {{port.basename}}_packet_type &p)
@@ -60,6 +63,7 @@ public:
     {{port.basename}}_data.push_back(p.data);
   {% endif %}
   UVM_INFO("{{port.basename.upper()}}_WRITE: ", p.str(), uvm::UVM_MEDIUM);
+  {{port.basename}}_e.notify();
 
   }
 {% endfor %}
@@ -90,6 +94,9 @@ UVM_COMPONENT_UTILS(scoreboard);
 {% endfor %}
   }
 
-};
+  void run_phase(uvm::uvm_phase &phase) {
+    check();
+  }
 
+};
 #endif

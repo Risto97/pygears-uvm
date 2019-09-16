@@ -64,7 +64,6 @@ public:
       sc_core::wait(vif->clk->posedge_event());
     } while (vif->dti_ready == 0);
 
-    if(p.eos())
       vif->dti_valid = 0;
   }
 

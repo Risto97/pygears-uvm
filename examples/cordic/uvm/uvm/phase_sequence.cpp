@@ -4,13 +4,22 @@
 */
 
 #include "phase_sequence.hpp"
+#include <cmath>
+#include <iostream>
 
 using phase_sequence_packet = dti_packet<integer_type<sc_dt::sc_uint<16>>>;
 template class phase_sequence<phase_sequence_packet, phase_sequence_packet>;
 
 template <typename packet_type, typename RSP>
 void phase_sequence<packet_type, RSP>::gen_seq() {
-  for (int i = 0; i < 65535; i++) {
-    data.push_back(i);
+  unsigned int pi = pow(2, 16) / 2;
+
+  for(int i =0 ; i < 1; i++){
+    data.push_back(0);
+    data.push_back(pi/6);
+    data.push_back(pi/4);
+    data.push_back(pi/3);
+    data.push_back(pi/2);
+    data.push_back(4* pi/3);
   }
 }
