@@ -2,9 +2,6 @@
 #define DTI_VIF_HPP_
 
 #include <systemc>
-#include <uvm>
-
-using namespace uvm;
 
 template <class data_type>
 class dti_vif

@@ -59,7 +59,7 @@ public:
   {% else %}
     {{port.basename}}_data.push_back(p.data);
   {% endif %}
-  UVM_INFO("{{port.basename.upper()}}_WRITE: ", p.str(), UVM_MEDIUM);
+  UVM_INFO("{{port.basename.upper()}}_WRITE: ", p.str(), uvm::UVM_MEDIUM);
 
   }
 {% endfor %}
