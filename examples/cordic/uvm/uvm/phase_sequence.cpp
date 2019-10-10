@@ -8,7 +8,7 @@
 #include <scv.h>
 #include <iostream>
 
-#define PHASE_TR_NUM 10
+#define PHASE_TR_NUM 100000
 
 using phase_sequence_packet = dti_packet<integer_type<sc_dt::sc_uint<16>>>;
 template class phase_sequence<phase_sequence_packet, phase_sequence_packet>;
@@ -22,6 +22,7 @@ void phase_sequence<packet_type, RSP>::gen_seq() {
 
   for(int j = 0; j < PHASE_TR_NUM; j++){
     phase_ang->next();
+    this->phase_cg.sample(*phase_ang);
     data.push_back(pi * (*phase_ang));
   }
 }

@@ -25,6 +25,8 @@ class UVM:
         try:
             os.environ['SYSTEMC']
             os.environ['SYSTEMC_UVM']
+            os.environ['FC4SC']
+            os.environ['SCV']
         except:
             raise EnvironmentError("Please set your environment variables")
 

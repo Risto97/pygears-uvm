@@ -5,6 +5,7 @@
 #include "Vwrap_{{uvm.dut.name}}.h"
 
 #include "env.hpp"
+#include "fc4sc.hpp"
 
 int sc_main(int argc, char **argv) {
   Verilated::commandArgs(argc, argv);
@@ -26,6 +27,7 @@ int sc_main(int argc, char **argv) {
 
   uvm::run_test();
 
+  fc4sc::global::coverage_save("coverage_results.xml");
   delete my_env;
 
   return 0;

@@ -5,11 +5,13 @@
 #include <string>
 #include <systemc>
 #include <uvm>
+#include <fc4sc.hpp>
 
 #include <iostream>
 
 #include "dti_packet.hpp"
 #include "data_types.hpp"
+#include "{{seq.name}}_cg.hpp"
 
 {% if seq.is_queue %}
 #include <vector>
@@ -20,6 +22,10 @@ class {{seq.name}} : public uvm::uvm_sequence<packet_type, RSP> {
 public:
 
 {{seq.seq_var_type()}} data;
+
+  #ifdef {{seq.name.upper()}}_CGROUPS
+  {{seq.name.upper()}}_CGROUPS
+  #endif
 
   {{seq.name}}(const std::string &name) : uvm::uvm_sequence<packet_type, RSP>(name) {}
 

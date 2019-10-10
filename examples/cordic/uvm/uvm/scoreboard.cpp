@@ -48,6 +48,7 @@ void scoreboard::check(){
     double dut_sin = (double)sinus / (pow(2,W_SIN-1) / 2);
     double dut_cos = (double)cosinus / (pow(2,W_COS-1) / 2);
 
+    this->sinus_cg.sample(sinus);
     if(!cmp_val(ref_sin, dut_sin, 2)){
       UVM_INFO("Mismatch on sin", display_cmp(ref_sin, dut_sin).str() , uvm::UVM_LOW);
     }

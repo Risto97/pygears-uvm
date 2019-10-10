@@ -4,6 +4,7 @@
 SYSTEMC := ${SYSTEMC}
 UVM_DIR = ${SYSTEMC_UVM}
 UVM_INSTALL_DIR = $(UVM_DIR)/objdir
+FC4SC_DIR = $(FC4SC)
 SCV_DIR = $(SCV)
 PYGEARS_UVM_DIR = {{uvm.pygears_uvm_dir}}
 PY_UVM_INC = -I$(PYGEARS_UVM_DIR)/include
@@ -18,6 +19,7 @@ UVM_OPT = -L$(UVM_DIR)/lib-linux64 -luvm-systemc
 UVM_SRC = -I$(UVM_DIR)/src/ -I$(UVM_INSTALL_DIR)/src/ -I$(UVM_DIR)/include
 SCV_OPT = $(SCV_DIR)/objdir/src/scv/.libs/libscv.so
 SCV_INC = -I$(SCV_DIR)/objdir/config -I$(SCV_DIR)/src
+FC4SC_INC = -I$(FC4SC_DIR)/includes
 
 DTI_INC = -I
 
@@ -49,7 +51,7 @@ all: $(PROGRAMS)
 # Generic build instructions for object files
 $(OBJDIR)/%.o: %.cpp
 	$(mk-objdir)
-	$(CXX) $(CFLAGS) -c $(SYSC_OPT) $(UVM_SRC) $(SCV_INC) $(SCV_OPT) $< -o $@
+	$(CXX) $(CFLAGS) -c $(SYSC_OPT) $(UVM_SRC) $(SCV_INC) $(SCV_OPT) $(FC4SC_INC) $< -o $@
 
 # And we'll repeat those instructions for building object files from sources
 # within the Verilator directory found within $(VERILATOR_ROOT)
@@ -81,6 +83,7 @@ clean:
 	rm -f $(PROGRAMS)
 	rm -rf $(OBJDIR)/
 	rm tags
+	rm coverage_results.xml
 
 # The "depends" target, to know what files things depend upon.  The depends
 # file itself is kept in $(OBJDIR)/depends.txt

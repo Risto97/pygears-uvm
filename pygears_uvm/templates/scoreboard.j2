@@ -8,6 +8,8 @@
 #include "dti_subscriber.hpp"
 #include "dti_packet.hpp"
 #include "data_types.hpp"
+#include <fc4sc.hpp>
+#include "scoreboard_cg.hpp"
 
 {% for port in uvm.dut.intfs %}
   using {{port.basename}}_packet_type = {{uvm.dut.packet_type_str(port)}};
@@ -33,6 +35,10 @@ public:
 {% for port in uvm.dut.intfs %}
   uvm::uvm_analysis_export<{{port.basename}}_packet_type> {{port.basename}}_listener_imp;
 {% endfor %}
+
+  #ifdef SCOREBOARD_CGROUPS
+  SCOREBOARD_CGROUPS
+  #endif
 
 void check();
 
