@@ -33,9 +33,6 @@
 
 ## Installation
 
-- All the `code` required to get started
-- Images of what it should look like
-
 ### Clone
 
 - `git clone https://github.com/Risto97/pygears_uvm.git`
