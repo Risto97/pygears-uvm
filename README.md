@@ -21,9 +21,13 @@
 
 - <a href="https://www.accellera.org/downloads/drafts-review" target="_blank">**SystemC-UVM**</a> Using public review beta version *UVM-SystemC Library 1.0-beta2*. Export **SYSTEMC\_UVM** variable to installed directory.
 
-- <a href="https://www.veripool.org/" target="_blank">**Verilator**</a> Verilator should be present in system path. Version 4.016 is recommended. (4.012 is not working).
+- <a href="https://www.veripool.org/" target="_blank">**Verilator**</a> Verilator should be present in system path. Version 4.016 is recommended. (4.012 is not working**.
 
-- <a href="https://github.com/bogdanvuk/pygears/tree/develop" target="_blank">****</a> develop branch.
+- <a href="https://github.com/bogdanvuk/pygears/tree/develop" target="_blank">**PyGears**</a> develop branch.
+
+- <a href="https://www.accellera.org/downloads/standards/systemc" target="_blank">**SystemC Verification**</a> for constraint randomization, export **SCV** variable to installed dir.
+
+- <a href="https://github.com/amiq-consulting/fc4sc" target="_blank">**FC4SC**</a> Functional Coverage for SystemC from Amiq Consulting, export FC4SC variable to installed dir.
 
 ---
 
