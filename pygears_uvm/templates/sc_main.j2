@@ -1,5 +1,6 @@
 #include <systemc>
 #include <uvm>
+#include <scv.h>
 #include "verilated.h"
 #include "Vwrap_{{uvm.dut.name}}.h"
 
@@ -7,6 +8,8 @@
 
 int sc_main(int argc, char **argv) {
   Verilated::commandArgs(argc, argv);
+
+  scv_random::set_global_seed(100);
 
   int verbosity = uvm::UVM_MEDIUM;
   uvm::uvm_config_db<int>::set(NULL, "*", "recording_detail", uvm::UVM_LOW);

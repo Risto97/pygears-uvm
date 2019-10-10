@@ -2,10 +2,7 @@
 #include "scoreboard.hpp"
 #include <systemc>
 #include <cmath>
-
-#include <iostream>
 #include <sstream>
-#include <string>
 
 #define W_PHASE 16
 #define W_SIN 12

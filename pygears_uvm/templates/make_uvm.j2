@@ -4,6 +4,7 @@
 SYSTEMC := ${SYSTEMC}
 UVM_DIR = ${SYSTEMC_UVM}
 UVM_INSTALL_DIR = $(UVM_DIR)/objdir
+SCV_DIR = $(SCV)
 PYGEARS_UVM_DIR = {{uvm.pygears_uvm_dir}}
 PY_UVM_INC = -I$(PYGEARS_UVM_DIR)/include
 
@@ -15,6 +16,8 @@ TOP_MOD = wrap_{{uvm.dut.name}}
 SYSC_OPT = -I${SYSTEMC}/include -L${SYSTEMC}/lib-linux64 -lsystemc
 UVM_OPT = -L$(UVM_DIR)/lib-linux64 -luvm-systemc
 UVM_SRC = -I$(UVM_DIR)/src/ -I$(UVM_INSTALL_DIR)/src/ -I$(UVM_DIR)/include
+SCV_OPT = $(SCV_DIR)/objdir/src/scv/.libs/libscv.so
+SCV_INC = -I$(SCV_DIR)/objdir/config -I$(SCV_DIR)/src
 
 DTI_INC = -I
 
@@ -46,7 +49,7 @@ all: $(PROGRAMS)
 # Generic build instructions for object files
 $(OBJDIR)/%.o: %.cpp
 	$(mk-objdir)
-	$(CXX) $(CFLAGS) -c $(SYSC_OPT) $(UVM_SRC) $< -o $@
+	$(CXX) $(CFLAGS) -c $(SYSC_OPT) $(UVM_SRC) $(SCV_INC) $(SCV_OPT) $< -o $@
 
 # And we'll repeat those instructions for building object files from sources
 # within the Verilator directory found within $(VERILATOR_ROOT)
@@ -57,7 +60,7 @@ $(OBJDIR)/%.o: $(VINCD)/%.cpp
 # Build our actual target.  Note the dependency on the $(OBJECTS) list of
 # object files above
 main_tb: $(OBJECTS) $(VOBJDR)/V$(TOP_MOD)__ALL.a
-	-g++ $(LINK_FLAGS) $(OBJECTS) $(VOBJDR)/V$(TOP_MOD)__ALL.a $(SYSC_OPT) $(UVM_OPT) -lpthread -pthread -Wl,-rpath -Wl,$(UVM_DIR)/lib-linux64 -Wl,-rpath -Wl,$(SYSTEMC)/lib-linux64 -o $@
+	-g++ $(LINK_FLAGS) $(OBJECTS) $(VOBJDR)/V$(TOP_MOD)__ALL.a $(SYSC_OPT) $(UVM_OPT) $(SCV_INC) $(SCV_OPT) -lpthread -pthread -Wl,-rpath -Wl,$(UVM_DIR)/lib-linux64 -Wl,-rpath -Wl,$(SYSTEMC)/lib-linux64 -o $@
 
 # The "test" target, just runs our test bench object
 #
@@ -85,7 +88,7 @@ clean:
 define build-depends
 	$(mk-objdir)
 	@echo "Building dependency file"
-	@$(CXX) $(CFLAGS) $(SYSC_OPT) $(INCS) -MM $(SOURCES) > $(OBJDIR)/xdepends.txt
+	@$(CXX) $(CFLAGS) $(SYSC_OPT) $(SCV_OPT) $(INCS) -MM $(SOURCES) > $(OBJDIR)/xdepends.txt
 	@sed -e 's/^.*.o: /$(OBJDIR)\/&/' < $(OBJDIR)/xdepends.txt > $(OBJDIR)/depends.txt
 	@rm $(OBJDIR)/xdepends.txt
 endef

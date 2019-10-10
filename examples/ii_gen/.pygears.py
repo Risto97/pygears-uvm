@@ -6,6 +6,6 @@ package_dir = os.path.dirname(design_dir.__file__)
 
 svlib_dir = os.path.join(
     package_dir, 'gears', 'svlib')
-registry('hdl/include_paths').append(svlib_dir)
+registry('hdl/include').append(svlib_dir)
 
-bind('hdl/debug_intfs', ['*'])
+bind('debug/trace', ['*'])

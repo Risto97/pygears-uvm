@@ -5,7 +5,10 @@
 
 #include "phase_sequence.hpp"
 #include <cmath>
+#include <scv.h>
 #include <iostream>
+
+#define PHASE_TR_NUM 10
 
 using phase_sequence_packet = dti_packet<integer_type<sc_dt::sc_uint<16>>>;
 template class phase_sequence<phase_sequence_packet, phase_sequence_packet>;
@@ -14,12 +17,11 @@ template <typename packet_type, typename RSP>
 void phase_sequence<packet_type, RSP>::gen_seq() {
   unsigned int pi = pow(2, 16) / 2;
 
-  for(int i =0 ; i < 1; i++){
-    data.push_back(0);
-    data.push_back(pi/6);
-    data.push_back(pi/4);
-    data.push_back(pi/3);
-    data.push_back(pi/2);
-    data.push_back(4* pi/3);
+  scv_smart_ptr<float> phase_ang ("phase_ang");
+  phase_ang->keep_only(0, 2*M_PI);
+
+  for(int j = 0; j < PHASE_TR_NUM; j++){
+    phase_ang->next();
+    data.push_back(pi * (*phase_ang));
   }
 }
