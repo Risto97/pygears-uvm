@@ -7,6 +7,6 @@ from pygears.typing import Queue, Uint
 
 din = Intf(Queue[Uint[8], 2])
 
-din | ii_gen(frame_size=(5, 5))
+din | ii_gen(frame_size=(25, 25))
 
 uvm_gen("uvm")

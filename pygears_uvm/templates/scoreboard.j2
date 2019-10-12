@@ -3,7 +3,7 @@
 
 #include <systemc>
 #include <uvm>
-#include <vector>
+#include <deque>
 
 #include "dti_subscriber.hpp"
 #include "dti_packet.hpp"
@@ -21,14 +21,6 @@ class scoreboard : public uvm::uvm_scoreboard
 public:
 {% for port in uvm.dut.intfs %}
   {{uvm.dut.container_type_str(port)}} {{port.basename}}_data;
-{% endfor %}
-
-{% for port in uvm.dut.intfs %}
-  {% if uvm.dut.is_queue(port) %}
-    {% for i in range(1, uvm.dut.queue_lvl(port)) %}
-      {{uvm.dut.container_type_str(uvm.dut.queue_flatten(port, lvl=i))}} {{port.basename}}_data{{uvm.dut.queue_lvl(port)-i-1}};
-    {% endfor %}
-  {% endif %}
   sc_core::sc_event {{port.basename}}_e;
 {% endfor %}
 
@@ -47,21 +39,18 @@ void check();
   {
   {% if uvm.dut.is_queue(port) %}
     {% if uvm.dut.queue_lvl(port) > 1 %}
-      {{port.basename}}_data{{0}}.push_back(p.data.data);
+      if({{port.basename}}_data.size() == 0)
+      {{port.basename}}_data.emplace_back();
+
+      {{port.basename}}_data.back().push_back(p.data.data);
     {% else %}
       {{port.basename}}_data.push_back(p.data.data);
     {% endif %}
+
     {% for i in range(0, uvm.dut.queue_lvl(port)-1) %}
       if(p.data.eot[{{i}}]){
-      {% if i == uvm.dut.queue_lvl(port)-2 %}
-        {{port.basename}}_data.push_back({{port.basename}}_data{{i}});
-        {{port.basename}}_data{{i}}.clear();
-      {% else %}
-        {{port.basename}}_data{{i+1}}.push_back({{port.basename}}_data{{i}});
-        {{port.basename}}_data{{i}}.clear();
-      {% endif %}
+        {{port.basename}}_data.emplace_back();
     {% endfor %}
-
     {% for i in range(0, uvm.dut.queue_lvl(port)-1) %}
       }
     {% endfor %}

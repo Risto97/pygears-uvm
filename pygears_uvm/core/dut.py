@@ -44,17 +44,16 @@ class DUT:
 
     def container_type_str(self, intf):
         seq_t = ""
-        data_t = "unsigned int"
 
         if self.is_queue(intf):
             for i in range(intf.dtype.lvl):
-                seq_t += "std::vector<"
-            seq_t += data_t
+                seq_t += "std::deque<"
+            seq_t += "unsigned int"
             seq_t += (i + 1) * "> "
         elif self.is_uint(intf):
-            seq_t = "std::vector<unsigned int>"
+            seq_t = "std::deque<unsigned int>"
         elif self.is_int(intf):
-            seq_t = "std::vector<int>"
+            seq_t = "std::deque<int>"
 
         return seq_t
 
