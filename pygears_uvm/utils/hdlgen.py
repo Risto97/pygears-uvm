@@ -16,8 +16,8 @@ assign ${intf_name}_ready = ${conn_name}.ready;
 """)
 
 def hdlgen_wspy(rtldir, dut):
-    bind('hdl/debug_intfs', [''])
-    bind('hdl/spy_connection_template', signal_spy_connect_t)
+    bind('debug/trace', [''])
+    bind('svgen/spy_connection_template', signal_spy_connect_t)
 
     hdlgen(
         f"/{dut.name}",
