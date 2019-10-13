@@ -3,7 +3,7 @@
 
 #include "scoreboard.hpp"
 
-#define SCOREBOARD_CGROUPS sb_coverage sinus_cg;
+// #define SCOREBOARD_CGROUPS sb_coverage sinus_cg;
 
 class sb_coverage : public covergroup{
 public:

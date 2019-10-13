@@ -25,7 +25,7 @@ void scoreboard::check(){
                  y++;
                  x = 0;
                }
-               unsigned int dut = dout_data.front().front();
+               auto dut = dout_data.front().front();
                dout_data.front().pop_front();
                auto ref = ref_ii.at(y).at(x);
                x++;

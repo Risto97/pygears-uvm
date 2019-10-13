@@ -8,17 +8,9 @@
 #define W_SIN 12
 #define W_COS 12
 
-double round_to(double val, unsigned int digit){
-  unsigned int tmp = pow(10, digit);
-
-  return roundf(val * tmp) / tmp;
-}
-
 bool cmp_val(double ref, double dut, int digit){
-  double ref_rnd = round_to(ref, digit);
-  double dut_rnd = round_to(dut, digit);
-
-  if( ref_rnd != dut_rnd ){
+  double error = fabs(fabs(ref) - fabs(dut));
+  if( error > (1/pow(10,digit)) ){
     return false;
   }
   return true;
@@ -48,21 +40,11 @@ void scoreboard::check(){
     double dut_sin = (double)sinus / (pow(2,W_SIN-1) / 2);
     double dut_cos = (double)cosinus / (pow(2,W_COS-1) / 2);
 
-    this->sinus_cg.sample(sinus);
     if(!cmp_val(ref_sin, dut_sin, 2)){
       UVM_INFO("Mismatch on sin", display_cmp(ref_sin, dut_sin).str() , uvm::UVM_LOW);
     }
-    else{
-        UVM_INFO("Match on sin", display_cmp(ref_sin, dut_sin).str() , uvm::UVM_LOW);
-    }
-
     if(!cmp_val(ref_cos, dut_cos, 2)){
       UVM_INFO("Mismatch on cos", display_cmp(ref_cos, dut_cos).str() , uvm::UVM_LOW);
     }
-    else{
-      UVM_INFO("Match on cos", display_cmp(ref_cos, dut_cos).str() , uvm::UVM_LOW);
-    }
-
   }
-
 }
